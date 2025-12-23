@@ -15,12 +15,21 @@ const data = require('./lib/data')
 // app object - module scaffolding
 const app = {};
 
-// testing file system
-data.create('test', "newFile", {'name': "Fahim", 'age': "26"}, (error)=>{
-    console.log(error)
-})
+// ------- testing file system --------
+// data.create('test', "newFile", {'name': "Fahim", 'age': "26"}, (error)=>{
+//     console.log(error)
+// })
+// data.read('test', "newFile", (error, data)=>{
+//     console.log(error, data)
+// })
+// data.update('test', "newFile", {'name': "Rahim", 'age': "17"}, (error)=>{
+//     console.log(error)
+// })
+// data.delete('test', "newFile", (error)=>{
+//     console.log(error)
+// })
 
-// configuration
+// ---------- configuration ---------
 // app.config = {
 //   port: 3000,
 // };
