@@ -8,21 +8,22 @@
 
 // dependencies
 const http = require("http");
-
-const {handlerReqRes} = require('./heplers/handleReqRes')
+const {handlerReqRes} = require('./heplers/handleReqRes');
+const environments = require('./heplers/environments')
 
 // app object - module scaffolding
 const app = {};
 
 // configuration
-app.config = {
-  port: 3000,
-};
+// app.config = {
+//   port: 3000,
+// };
 
 app.createServer = () => {
   const server = http.createServer(app.handleReqRes);
-  server.listen(app.config.port, () => {
-    // console.log(`listening to port ${app.config.port}`);
+  console.log("environments", environments.port)
+  server.listen(environments.port, () => {
+    console.log(`listening to port ${environments.port}`);
   });
 };
 

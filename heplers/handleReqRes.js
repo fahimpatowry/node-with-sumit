@@ -34,22 +34,15 @@ handler.handlerReqRes = (req, res) => {
     trimmedPath,
     method,
     queryStringObject,
-    headerObject
-  }
+    headerObject,
+  };
 
   const decoder = new StringDecoder("utf-8");
   let realData = "";
 
-  const chosenHandler = routes[trimmedPath] ? routes[trimmedPath] : notFoundHandler;
-  chosenHandler(requestProperties, (statusCode, payload)=>{
-    statusCode = typeof(statusCode) === 'number' ? statusCode : 500;
-    payload = typeof(payload) === 'object' ? payload : {}
-
-    const payloadString = JSON.stringify(payload)
-
-    res.writeHead(statusCode);
-    res.end(payloadString)
-  })
+  const chosenHandler = routes[trimmedPath]
+    ? routes[trimmedPath]
+    : notFoundHandler;
 
   req.on("data", (buffer) => {
     realData += decoder.write(buffer);
@@ -57,7 +50,16 @@ handler.handlerReqRes = (req, res) => {
 
   req.on("end", () => {
     realData += decoder.end();
-    console.log(realData);
+
+    chosenHandler(requestProperties, (statusCode, payload) => {
+      statusCode = typeof statusCode === "number" ? statusCode : 500;
+      payload = typeof payload === "object" ? payload : {};
+
+      const payloadString = JSON.stringify(payload);
+
+      res.writeHead(statusCode);
+      res.end(payloadString);
+    });
 
     // response handler
     res.end(`Hello World hi /n ${realData}`);
