@@ -10,9 +10,15 @@
 const http = require("http");
 const {handlerReqRes} = require('./heplers/handleReqRes');
 const environments = require('./heplers/environments')
+const data = require('./lib/data')
 
 // app object - module scaffolding
 const app = {};
+
+// testing file system
+data.create('test', "newFile", {'name': "Fahim", 'age': "26"}, (error)=>{
+    console.log(error)
+})
 
 // configuration
 // app.config = {
