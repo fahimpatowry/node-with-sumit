@@ -14,7 +14,7 @@ const routes = require("../routes");
 const {
   notFoundHandler,
 } = require("../handlers/routeHandlers/notFoundHandler");
-const {parseJson}= require('../handlers/routeHandlers/utilities')
+const { parseJson } = require("../handlers/routeHandlers/utilities");
 
 //  module scaffolding
 const handler = {};
@@ -24,7 +24,7 @@ handler.handlerReqRes = (req, res) => {
   // get the url and parse it
   const parsedURl = url.parse(req.url, true);
   const path = parsedURl.path;
-  const trimmedPath = path.replace(/^\/+|\/+$/g, "");
+  const trimmedPath = path.split("?")[0].replace(/^\/+|\/+$/g, "");
   const method = req.method.toLowerCase();
   const queryStringObject = parsedURl.query;
   const headerObject = req.headers;
@@ -59,13 +59,13 @@ handler.handlerReqRes = (req, res) => {
 
       const payloadString = JSON.stringify(payload);
 
-      res.setHeader("Content-Type", 'application/json')
+      res.setHeader("Content-Type", "application/json");
       res.writeHead(statusCode);
       res.end(payloadString);
     });
 
     // response handler
-    res.end(`Hello World hi /n ${realData}`);
+    // res.end(`${realData}`);
   });
 };
 
