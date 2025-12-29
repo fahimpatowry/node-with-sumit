@@ -13,8 +13,8 @@ const { buffer } = require("stream/consumers");
 const routes = require("../routes");
 const {
   notFoundHandler,
-} = require("../handlers/routeHandlers/notFoundHandler");
-const { parseJson } = require("../handlers/routeHandlers/utilities");
+} = require("../handlers/notFoundHandler");
+const { parseJson } = require("../handlers/utilities");
 
 //  module scaffolding
 const handler = {};

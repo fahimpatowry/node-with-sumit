@@ -7,7 +7,7 @@
  */
 
 const crypto = require("crypto");
-const environments = require("../../heplers/environments");
+const environments = require("../heplers/environments");
 
 // module scaffolding
 const utilities = {};
