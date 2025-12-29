@@ -41,10 +41,10 @@ handler._token.post = (requestProperties, callback) => {
   if (phone && password) {
     data.read("users", phone, (err1, userData) => {
       let hashPassword = hash(password);
-        
+
       if (hashPassword === parseJson(userData).password) {
         let tokenId = createRandomString(20);
-        let expires = Date.now() + 60 * 60 * 1000;
+        let expires = Date.now() + 3600 * 60 * 1000;
 
         let tokenObject = {
           phone,
@@ -75,10 +75,122 @@ handler._token.post = (requestProperties, callback) => {
   }
 };
 
-handler._token.get = (requestProperties, callback) => {};
+handler._token.get = (requestProperties, callback) => {
+  const id =
+    typeof requestProperties.queryStringObject.id === "string" &&
+    requestProperties.queryStringObject.id.trim().length === 20
+      ? requestProperties.queryStringObject.id
+      : false;
 
-handler._token.put = (requestProperties, callback) => {};
+  if (id) {
+    // look up the token
+    data.read("tokens", id, (err, tokenData) => {
+      const token = { ...parseJson(tokenData) };
 
-handler._token.delete = (requestProperties, callback) => {};
+      if (!err && token) {
+        callback(200, token);
+      } else {
+        callback(404, {
+          error: "request token not found in file",
+        });
+      }
+    });
+  } else {
+    callback(404, {
+      error: "request token not found",
+    });
+  }
+};
+
+handler._token.put = (requestProperties, callback) => {
+  const id =
+    typeof requestProperties.body.id === "string" &&
+    requestProperties.body.id.trim().length === 20
+      ? requestProperties.body.id
+      : false;
+  const extend =
+    typeof requestProperties.body.extend === "boolean" &&
+    requestProperties.body.extend === true
+      ? requestProperties.body.extend
+      : false;
+
+  if (id && extend) {
+    data.read("tokens", id, (err1, tokenData) => {
+      let tokenObject = parseJson(tokenData);
+
+      console.log("tokenObject: ", tokenObject);
+      if (tokenObject.expires > Date.now()) {
+        tokenObject.expires = Date.now() + 360 * 60 * 1000;
+        data.update("tokens", id, tokenObject, (err2) => {
+          if (!err2) {
+            callback(200, {
+              error: "Expire updated",
+            });
+          } else {
+            callback(500, {
+              error: "There was a server side error",
+            });
+          }
+        });
+      } else {
+        callback(400, {
+          error: "Token already expired",
+        });
+      }
+    });
+  } else {
+    callback(404, {
+      error: "request token not found",
+    });
+  }
+};
+
+handler._token.delete = (requestProperties, callback) => {
+  const id =
+    typeof requestProperties.queryStringObject.id === "string" &&
+    requestProperties.queryStringObject.id.trim().length === 20
+      ? requestProperties.queryStringObject.id
+      : false;
+
+  if (id) {
+    let isDelete = true;
+    data.read("tokens", id, (err1, tokenData) => {
+      if (!err1 && tokenData) {
+        // isDelete = true;
+        data.delete("tokens", id, (err) => {
+          if (isDelete) {
+            if (!err) {
+              callback(200, { massage: "token successfully deleted" });
+            } else {
+              callback(500, { massage: "side error" });
+            }
+          }
+        });
+      } else {
+        callback(500, {
+          massage: "there a server side error",
+        });
+      }
+    });
+  } else {
+    callback(400, {
+      error: "There was a problem in you request",
+    });
+  }
+};
+
+handler._token.verify = (id, phone, callback) => {
+  data.read("tokens", id, (err1, tokenData) => {
+    if (!err1 && tokenData) {
+      const data = parseJson(tokenData);
+
+      if (data.phone === phone && data.expires > Date.now()) {
+        callback(true);
+      }
+    } else {
+      callback(false);
+    }
+  });
+};
 
 module.exports = handler;
