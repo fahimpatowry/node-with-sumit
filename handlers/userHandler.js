@@ -9,8 +9,8 @@
 
 // dependencies
 const data = require("../lib/data");
-const { hash } = require("../handlers/utilities");
-const { parseJson } = require("../handlers/utilities");
+const { hash } = require("../heplers/utilities");
+const { parseJson } = require("../heplers/utilities");
 
 const handler = {};
 

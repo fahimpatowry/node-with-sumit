@@ -7,7 +7,7 @@
  */
 
 const crypto = require("crypto");
-const environments = require("../heplers/environments");
+const environments = require("./environments");
 
 // module scaffolding
 const utilities = {};
@@ -32,7 +32,25 @@ utilities.hash = (str) => {
       .createHmac("sha256", environments.secretkey)
       .update(str)
       .digest("hex");
-      return hash;
+    return hash;
+  } else {
+    return false;
+  }
+};
+
+// create random string 
+utilities.createRandomString = (strLength) => {
+  // let length = strLength;
+  let length = typeof(strLength) === 'number' && strLength > 0 ? strLength : false;
+
+  if(length){
+    let possibleCharacters = 'abcdefghijklmnopquwerxyz1234567890';
+    let output = '';
+    for(let i =1; i <= length; i++){
+      const randomCharacter = possibleCharacters.charAt(Math.floor(Math.random() * possibleCharacters.length));
+      output += randomCharacter;
+    }
+    return output
   }else{
     return false;
   }

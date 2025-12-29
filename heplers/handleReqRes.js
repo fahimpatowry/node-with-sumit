@@ -14,7 +14,7 @@ const routes = require("../routes");
 const {
   notFoundHandler,
 } = require("../handlers/notFoundHandler");
-const { parseJson } = require("../handlers/utilities");
+const { parseJson } = require("../heplers/utilities");
 
 //  module scaffolding
 const handler = {};
