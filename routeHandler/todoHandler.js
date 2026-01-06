@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const todoSchema = require("../schemas/todoSchema");
 const mongoose = require("mongoose");
+const checkLogin = require("../middlewares/checkLogin");
 
 // model
 const Todo = new mongoose.model("Todo", todoSchema);
@@ -65,7 +66,7 @@ router.get("/by-status", async (req, res) => {
 
 // ******** CRUD by mongoose *********
 // get all the TODOS
-router.get("/", async (req, res) => {
+router.get("/", checkLogin, async (req, res) => {
   try {
     // const data = await Todo.find({});
     const data = await Todo.find(
