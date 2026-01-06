@@ -18,4 +18,25 @@ const todoSchema = mongoose.Schema(
     }
 );
 
+// ******* instance methods ********* 
+todoSchema.methods = {
+    findActive: function(){
+        return mongoose.model("Todo").find({status: 'active'});
+    },
+}
+
+// *******  statics methods ******* 
+todoSchema.statics = {
+    findByTitle: function(){
+        return this.find({title: /iphone/i}); // new RegExp()
+    },
+}
+
+// *******  query helper ******* 
+todoSchema.query = {
+    byStatus: function(status){
+        return this.find({status: new RegExp(status, "i")}); // new RegExp()
+    },
+}
+
 module.exports = todoSchema;

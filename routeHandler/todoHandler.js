@@ -6,6 +6,64 @@ const mongoose = require("mongoose");
 // model
 const Todo = new mongoose.model("Todo", todoSchema);
 
+// ******* instance method ********* 
+// get all active the TODOS
+router.get("/active", async (req, res) => {
+  const todo = new Todo();
+
+  try {
+    // const data = await Todo.find({});
+    const data = await todo.findActive();
+    res.status(200).json({
+      message: "all todo",
+      data: data, // 👈 now you can send data
+      meta: {
+        totalItems: data.length ?? 0,
+      },
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: "There was a server side error",
+    });
+  }
+});
+
+// ******* static method ********* 
+// get title  the TODOS
+router.get("/title", async (req, res) => {
+  try {
+    // const data = await Todo.find({});
+    const data = await Todo.findByTitle();
+    res.status(200).json({
+      message: "all todo",
+      data: data, // 👈 now you can send data
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: "There was a server side error",
+    });
+  }
+});
+
+// ******* query helper ********* 
+// get by status  the TODOS
+router.get("/by-status", async (req, res) => {
+  try {
+    // const data = await Todo.find({});
+    const data = await Todo.find().byStatus("inactive");
+    res.status(200).json({
+      message: "all todo",
+      data: data, // 👈 now you can send data
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: "There was a server side error",
+    });
+  }
+});
+
+
+// ******** CRUD by mongoose *********
 // get all the TODOS
 router.get("/", async (req, res) => {
   try {
