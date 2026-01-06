@@ -6,7 +6,7 @@ const router = express.Router();
 const userSchema = require("../schemas/userSchema");
 
 // model
-const User = new mongoose.model("user", userSchema);
+const User = new mongoose.model("User", userSchema);
 
 // Signup
 router.post("/signup", async (req, res) => {
@@ -66,6 +66,21 @@ router.post("/login", async (req, res) => {
         error: "Authentication failed!",
       });
     }
+  } catch {
+    res.status(401).json({
+      error: "Authentication failed",
+    });
+  }
+});
+
+// get all user
+router.get("/all", async (req, res) => {
+  try {
+    const user = await User.find({}).populate("todos");
+    res.status(200).json({
+      data: user
+    });
+
   } catch {
     res.status(401).json({
       error: "Authentication failed",
